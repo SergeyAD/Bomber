@@ -11,6 +11,8 @@ public class MainMove : MonoBehaviour
     public float _pouseFire;
     public float _powerFire;
     public int _ammor;
+    public List<GameObject> _keys;
+
     //public float _maxHeight;
     //public float _minHeight;
 
@@ -18,7 +20,12 @@ public class MainMove : MonoBehaviour
     private float _turn;
     private float _pouse;
     private bool _canFire = true;
-    
+
+    private void Start()
+    {
+        _keys = new List<GameObject>();
+    }
+
 
     private void Update()
     {
@@ -54,8 +61,9 @@ public class MainMove : MonoBehaviour
             if (_canFire == true && _ammor > 0)
             { 
             
-            GameObject bull = Instantiate(_bull, _guns.transform.GetChild(1).gameObject.transform.position, transform.rotation);
-            bull.GetComponent<Rigidbody>().AddForce(_guns.transform.GetChild(1).gameObject.transform.forward*_powerFire, ForceMode.Impulse);
+                GameObject bull = Instantiate(_bull, _guns.transform.GetChild(1).gameObject.transform.position, transform.rotation);
+                bull.GetComponent<BulletMove>()._sender = gameObject;
+                bull.GetComponent<Rigidbody>().AddForce(_guns.transform.GetChild(1).gameObject.transform.forward*_powerFire, ForceMode.Impulse);
                 _ammor--;
                 _canFire = false;
                 _pouse = 0;
@@ -67,20 +75,69 @@ public class MainMove : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        _ammor += other.transform.GetComponent<UserPoint>()._ammor;
-        other.transform.GetComponent<UserPoint>()._ammor = 0;
-        
-        // По какой то причине данный кусок кода запускается несколько раз при заходе на UserPoint создается несколько противников вместо одного
-        GameObject[] _ePoints = other.transform.GetComponent<UserPoint>()._enemyPointsToActivate;
 
-        for (var i = 0; i < _ePoints.Length; i++)
+        if (other.transform.GetComponent<UserPoint>())
         {
-            Instantiate(_ePoints[i].transform.GetComponent<EnemyPointScript>()._enemy, _ePoints[i].transform.position, _ePoints[i].transform.rotation);
-            
-        }
-        other.gameObject.SetActive(false);
-        Destroy(other.gameObject);
 
+            _ammor += other.transform.GetComponent<UserPoint>()._ammor;
+            other.transform.GetComponent<UserPoint>()._ammor = 0;
+            transform.GetComponent<Health>()._lives += other.transform.GetComponent<UserPoint>()._live;
+            other.transform.GetComponent<UserPoint>()._live = 0;
+            if (other.transform.GetComponent<UserPoint>()._keys.Count != 0)
+            {
+                var keys = other.transform.GetComponent<UserPoint>()._keys;
+                foreach (GameObject _obj in keys)
+                {
+                    _keys.Add(_obj);
+                    
+                    other.transform.GetComponent<UserPoint>()._keys.Remove(_obj);
+                }
+
+                
+            }
+            
+            // генерация противноков
+            // По какой то причине данный кусок кода запускается несколько раз при заходе на UserPoint создается несколько противников вместо одного решилось дезавтивацией перед destroy
+            GameObject[] _ePoints = other.transform.GetComponent<UserPoint>()._enemyPointsToActivate;
+
+            for (var i = 0; i < _ePoints.Length; i++)
+            {
+                Instantiate(_ePoints[i].transform.GetComponent<EnemyPointScript>()._enemy, _ePoints[i].transform.position, _ePoints[i].transform.rotation);
+
+            }
+            // открывание дверей
+            
+           if (other.transform.GetComponent<UserPoint>()._doorToOpen.Count != 0)
+            {
+                var doors = other.transform.GetComponent<UserPoint>()._doorToOpen;
+                foreach (var door in doors)
+                {
+                    
+                    if (_keys.Contains(door.GetComponent<DoorScript>()._key))
+                    {
+                        door.GetComponent<DoorScript>()._open = true;
+                        _keys.Remove(door.GetComponent<DoorScript>()._key);
+                        other.transform.GetComponent<UserPoint>()._doorToOpen.Remove(door);
+
+                        //var index = other.transform.GetComponent<UserPoint>()._doorToOpen.Find(item => item == door);
+
+                        //other.transform.GetComponent<UserPoint>()._doorToOpen.Find(door)
+                    }
+                    
+                    
+                }
+            }
+
+            
+
+            if (other.transform.GetComponent<UserPoint>()._ammor == 0 && other.transform.GetComponent<UserPoint>()._live == 0 && other.transform.GetComponent<UserPoint>()._keys.Count == 0 && other.transform.GetComponent<UserPoint>()._doorToOpen.Count == 0)
+            {
+                
+                other.gameObject.SetActive(false);
+                Destroy(other.gameObject);
+            }
+        }
+    
     }
 
 

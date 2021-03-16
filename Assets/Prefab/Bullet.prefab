@@ -123,5 +123,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b64a1731ba25f5347b1bb9540a14177c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _health: 1
   _timerBul: 1
   _boom: {fileID: 100000, guid: 5d028565f79e270408884b995abc06ef, type: 3}
+  _sender: {fileID: 4010710018491404119, guid: bca3c3d052d2c9949a0a93dc85be9876, type: 3}

@@ -75,6 +75,7 @@ GameObject:
   - component: {fileID: 3099487731785641945}
   - component: {fileID: 2770175014882565177}
   - component: {fileID: -4647597368555587176}
+  - component: {fileID: 4316169229850968802}
   m_Layer: 0
   m_Name: PBR_Golem
   m_TagString: Untagged
@@ -161,6 +162,20 @@ CapsuleCollider:
   m_Height: 4
   m_Direction: 1
   m_Center: {x: 0, y: 2, z: 0.3}
+--- !u!114 &4316169229850968802
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1067925524328404}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8b93332c6357be45a1d63c10642b4e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _health: 1
+  lives: 1
 --- !u!1 &1088256926929212
 GameObject:
   m_ObjectHideFlags: 0
