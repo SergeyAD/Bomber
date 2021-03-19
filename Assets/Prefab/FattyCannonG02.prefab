@@ -5106,7 +5106,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _health: 1
-  lives: 1
+  _lives: 0
+  _gamePoints: 1
 --- !u!1 &1931211189434318
 GameObject:
   m_ObjectHideFlags: 0

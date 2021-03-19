@@ -14,7 +14,8 @@ public class BulletMove : MonoBehaviour
     private Vector3 _positionPrev;
     private Vector3 _positionNext;
     private float _timer;
-    Animator m_Animator;
+    private Animator m_Animator;
+   
 
     private void Start()
     {
@@ -71,11 +72,18 @@ public class BulletMove : MonoBehaviour
                     if (other.gameObject.GetComponent<Animator>())
                     {
 
+                        if (other.gameObject.GetComponent<Animator>())
                         other.gameObject.GetComponent<Animator>().SetBool("Die", true);
                         Destroy(other.gameObject, 2);
+                      
+
                     }
                     else Destroy(other.gameObject, 1);
+                    if (other.GetComponent<Health>()._gamePoints > 0)
+                    {
+                        GameObject.FindGameObjectsWithTag("Player")[0].GetComponent<MainMove>()._gamePoints += other.GetComponent<Health>()._gamePoints;
 
+                    }
                 }
             }
             

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MainMove : MonoBehaviour
 {
@@ -12,6 +13,13 @@ public class MainMove : MonoBehaviour
     public float _powerFire;
     public int _ammor;
     public List<GameObject> _keys;
+    public Image _healthBar;
+    public TrajectoryScript Trajectory;
+    public GameObject _gamePointsText;
+
+    public Camera _mainCamera;
+    public Camera _fireCamera;
+
 
     //public float _maxHeight;
     //public float _minHeight;
@@ -20,10 +28,13 @@ public class MainMove : MonoBehaviour
     private float _turn;
     private float _pouse;
     private bool _canFire = true;
+    public int _gamePoints;
 
     private void Start()
     {
         _keys = new List<GameObject>();
+        _mainCamera.enabled = true;
+        _fireCamera.enabled = false;
     }
 
 
@@ -32,6 +43,28 @@ public class MainMove : MonoBehaviour
         
         _vector.z = Input.GetAxis("Vertical");
         _turn = Input.GetAxis("Horizontal");
+        _healthBar.fillAmount = GetComponent<Health>()._health / 10;
+
+
+        if (Input.GetMouseButtonDown(1) || Input.GetKeyDown(KeyCode.CapsLock))
+        {
+            _mainCamera.enabled = false;
+            _fireCamera.enabled = true;
+        }
+        if (Input.GetMouseButtonUp(1) || Input.GetKeyUp(KeyCode.CapsLock))
+        {
+            _mainCamera.enabled = true;
+            _fireCamera.enabled = false;
+        }
+
+        _gamePointsText.gameObject.GetComponent<Text>().text = _gamePoints.ToString();
+
+    }
+
+    private void gunRotate(Transform _gunTransform, int _rotate)
+    {
+        //_gunTransform.GetChild(0).gameObject.transform.Rotate(new Vector3(0, _rotate * _speedRun * Time.deltaTime, 0));
+        _gunTransform.GetChild(1).gameObject.transform.Rotate(new Vector3(0, _rotate * _speedRun * Time.deltaTime, 0));
     }
 
     private void FixedUpdate()
@@ -42,19 +75,32 @@ public class MainMove : MonoBehaviour
         transform.parent.gameObject.transform.Rotate(new Vector3(0, turn, 0));
 
         
-        if (Input.GetKey(KeyCode.O)) //&& _guns.transform.GetChild(0).gameObject.transform.rotation.x < _maxHeight
+        if (Input.GetKey(KeyCode.L)) //&& _guns.transform.GetChild(0).gameObject.transform.rotation.x < _maxHeight
         {
-            _guns.transform.GetChild(0).gameObject.transform.Rotate(new Vector3(0, -10 * _speedRun * Time.deltaTime, 0));
-            _guns.transform.GetChild(1).gameObject.transform.Rotate(new Vector3(0, -10 * _speedRun * Time.deltaTime, 0));
+            gunRotate(_guns.transform, -10);
+
         }
-        else if (Input.GetKey(KeyCode.L)) //&& _guns.transform.GetChild(0).gameObject.transform.rotation.x > _minHeight
+        else if (Input.GetKey(KeyCode.O)) //&& _guns.transform.GetChild(0).gameObject.transform.rotation.x > _minHeight
         {
-            _guns.transform.GetChild(0).gameObject.transform.Rotate(new Vector3(0, 10 * _speedRun * Time.deltaTime, 0));
-            _guns.transform.GetChild(1).gameObject.transform.Rotate(new Vector3(0, 10 * _speedRun * Time.deltaTime, 0));
+            gunRotate(_guns.transform, 10);
+
         }
 
-        if (_canFire == false) _pouse += Time.deltaTime;
-        if (_pouse > _pouseFire) _canFire = true;
+        if (_canFire == false)
+            _pouse += Time.deltaTime;
+        
+        if (_pouse > _pouseFire)
+            _canFire = true; 
+
+        if (_canFire && _fireCamera.enabled )
+        {
+            
+            Trajectory.ShowTrajectory(_guns.transform.GetChild(1).gameObject.transform.position, _guns.transform.GetChild(1).gameObject.transform.forward * _powerFire);
+        }
+        else
+        {
+            Trajectory.HideTrajectory();
+        }
 
         if (Input.GetKey(KeyCode.Space))
         {
@@ -70,6 +116,9 @@ public class MainMove : MonoBehaviour
             }
         }
 
+
+
+
     }
 
 
@@ -79,13 +128,16 @@ public class MainMove : MonoBehaviour
         if (other.transform.GetComponent<UserPoint>())
         {
 
-            _ammor += other.transform.GetComponent<UserPoint>()._ammor;
+            var _userPoint = other.transform.GetComponent<UserPoint>();
+
+
+            _ammor += _userPoint._ammor;
             other.transform.GetComponent<UserPoint>()._ammor = 0;
-            transform.GetComponent<Health>()._lives += other.transform.GetComponent<UserPoint>()._live;
+            transform.GetComponent<Health>()._lives += _userPoint._live;
             other.transform.GetComponent<UserPoint>()._live = 0;
-            if (other.transform.GetComponent<UserPoint>()._keys.Count != 0)
+            if (_userPoint._keys.Count != 0)
             {
-                var keys = other.transform.GetComponent<UserPoint>()._keys;
+                var keys = _userPoint._keys;
                 foreach (GameObject _obj in keys)
                 {
                     _keys.Add(_obj);
@@ -98,7 +150,7 @@ public class MainMove : MonoBehaviour
             
             // генерация противноков
             // По какой то причине данный кусок кода запускается несколько раз при заходе на UserPoint создается несколько противников вместо одного решилось дезавтивацией перед destroy
-            GameObject[] _ePoints = other.transform.GetComponent<UserPoint>()._enemyPointsToActivate;
+            GameObject[] _ePoints = _userPoint._enemyPointsToActivate;
 
             for (var i = 0; i < _ePoints.Length; i++)
             {
@@ -107,9 +159,9 @@ public class MainMove : MonoBehaviour
             }
             // открывание дверей
             
-           if (other.transform.GetComponent<UserPoint>()._doorToOpen.Count != 0)
+           if (_userPoint._doorToOpen.Count != 0)
             {
-                var doors = other.transform.GetComponent<UserPoint>()._doorToOpen;
+                var doors = _userPoint._doorToOpen;
                 foreach (var door in doors)
                 {
                     
@@ -130,7 +182,7 @@ public class MainMove : MonoBehaviour
 
             
 
-            if (other.transform.GetComponent<UserPoint>()._ammor == 0 && other.transform.GetComponent<UserPoint>()._live == 0 && other.transform.GetComponent<UserPoint>()._keys.Count == 0 && other.transform.GetComponent<UserPoint>()._doorToOpen.Count == 0)
+            if (_userPoint._ammor == 0 && _userPoint._live == 0 && _userPoint._keys.Count == 0 && _userPoint._doorToOpen.Count == 0)
             {
                 
                 other.gameObject.SetActive(false);

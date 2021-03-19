@@ -6,4 +6,5 @@ public class Health : MonoBehaviour
 {
     public float _health;
     public int _lives;
+    public int _gamePoints;
 }
