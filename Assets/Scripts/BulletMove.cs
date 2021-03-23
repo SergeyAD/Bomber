@@ -20,43 +20,32 @@ public class BulletMove : MonoBehaviour
     private void Start()
     {
         _timer = 0;
-        
     }
 
 
     private void Update()
     {
-        
-        
-        
         if (transform.position.y < -1)
         {
             Destroy(gameObject,3);
         }
-        
         if (_timer > _timerBul)
         {
-            
             Destroy(gameObject, 3);
         }
         _timer += Time.deltaTime;
-
-        
-
     }
 
     private void FixedUpdate()
     {
         if (_positionPrev == gameObject.transform.position)
         {
-            
             Destroy(gameObject, 3);
         }
         else
         {
             _positionPrev = gameObject.transform.position;
         }
-
     }
 
     private void OnTriggerEnter(Collider other)
@@ -71,23 +60,17 @@ public class BulletMove : MonoBehaviour
                 {
                     if (other.gameObject.GetComponent<Animator>())
                     {
-
                         if (other.gameObject.GetComponent<Animator>())
                         other.gameObject.GetComponent<Animator>().SetBool("Die", true);
                         Destroy(other.gameObject, 2);
-                      
-
-                    }
+                     }
                     else Destroy(other.gameObject, 1);
                     if (other.GetComponent<Health>()._gamePoints > 0)
                     {
-                        GameObject.FindGameObjectsWithTag("Player")[0].GetComponent<MainMove>()._gamePoints += other.GetComponent<Health>()._gamePoints;
-
+                        GameObject.FindGameObjectWithTag("Player").GetComponent<MainMove>().gamePoints += other.GetComponent<Health>()._gamePoints;
                     }
                 }
             }
-            
-
             Destroy(gameObject);
             Destroy(_boomer, 1);
         }

@@ -7,48 +7,72 @@ public class GolemMove : MonoBehaviour
 {
     public Transform[] _points;
     public float _speed = 0.0f, _distance = 0.0f;
+    public Transform target;
     private int _currentPoint;
     private NavMeshAgent _navMesh;
+    private bool hunt;
+    private float distanceHunt;
+    private float pouseHunt;
 
     void Awake()
     {
         _navMesh = GetComponent<NavMeshAgent>();
         _currentPoint = 0;
+        hunt = false;
+        pouseHunt = 0;
+        distanceHunt = 25;
     }
 
-    // Update is called once per frame
+    
     void Update()
     {
-        
-        if (_points.Length != 0)
+        // игрок в зоне видимости
+        if (target != null && Vector3.Distance(transform.position, target.transform.position) < distanceHunt)
         {
-            if (Vector3.Distance(transform.position, _points[_currentPoint].position) < _distance)
-            {
-                if (_currentPoint == _points.Length - 1)
-                {
-                    _currentPoint = 0;
-                }
-                else
-                {
-                    _currentPoint++;
-                }
-                    
-            }
+            hunt = true;
             if (GetComponent<Animator>())
-            GetComponent<Animator>().SetBool("Walk", true);
-            _navMesh.destination = _points[_currentPoint].position;
+                GetComponent<Animator>().SetBool("Walk", true);
+            _navMesh.destination = target.position;
+            Debug.Log("Hunt!");
         }
 
-        //if (_currentPoint == Points.Length) _currentPoint = 0;
-        //
-        //float _currentDistance = Vector3.Distance(transform.position, Points[_currentPoint].position);
-        //if (_currentDistance <= Distance) _currentPoint++;
-        //
-        //
-        //transform.LookAt(Points[_currentPoint].position);
-        //GetComponent<Animator>().SetBool("Walk",true);
-        //transform.position = Vector3.MoveTowards(transform.position, Points[_currentPoint].position, Speed * Time.deltaTime);
+        // потеряли игрока из виду
+        if (hunt == true && target != null && Vector3.Distance(transform.position, target.transform.position) > distanceHunt)
+        {
+            Debug.Log("Lost!");
+            pouseHunt++;
+            if (pouseHunt > 10)
+            {
+                hunt = false;
+                Debug.Log("Патрулировать!");
+            }
+                
+        }
 
 
+
+            // просто патрулирование
+            if (!hunt)
+        {
+            if (_points.Length != 0)
+            {
+                if (Vector3.Distance(transform.position, _points[_currentPoint].position) < _distance)
+                {
+                    if (_currentPoint == _points.Length - 1)
+                    {
+                        _currentPoint = 0;
+                    }
+                    else
+                    {
+                        _currentPoint++;
+                    }
+                }
+                if (GetComponent<Animator>())
+                    GetComponent<Animator>().SetBool("Walk", true);
+                _navMesh.destination = _points[_currentPoint].position;
+            }
+        }
+        
+        
     }
 }

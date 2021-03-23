@@ -4,19 +4,12 @@ using UnityEngine;
 
 public class DoorScript : MonoBehaviour
 {
-    public GameObject _key;
-    public bool _open;
+    public GameObject key;
+    public bool open;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
     void Update()
     {
-        if (_open == true)
+        if (open)
             gameObject.SetActive(false);
     }
 }

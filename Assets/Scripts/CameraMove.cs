@@ -15,13 +15,12 @@ public class CameraMove : MonoBehaviour
 
     private void LateUpdate()
     {
-        var currentPosition = _object.transform.TransformPoint(_position);
-        //transform.position = currentPosition;
-        transform.position = Vector3.MoveTowards(transform.position, currentPosition, _speed*Time.deltaTime);
-        transform.LookAt(_object.transform);
-        
-
-        
+        if (_object != null)
+        {
+            var currentPosition = _object.transform.TransformPoint(_position);
+            transform.position = Vector3.MoveTowards(transform.position, currentPosition, _speed * Time.deltaTime);
+            transform.LookAt(_object.transform);
+        }
     }
 
 
