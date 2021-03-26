@@ -10,8 +10,9 @@ public class Simple_while : MonoBehaviour
     {
         int i = 0;
 
-        while(i < 40000)
+        while(i < 400000)
         {
+            
             i++;
         }
         

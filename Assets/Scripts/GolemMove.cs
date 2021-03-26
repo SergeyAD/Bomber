@@ -6,13 +6,20 @@ using UnityEngine.AI;
 public class GolemMove : MonoBehaviour
 {
     public Transform[] _points;
-    public float _speed = 0.0f, _distance = 0.0f;
+    public float distanceHunt;
     public Transform target;
+    public float attackdistance;
+    public float attackPower;
+    public float attackPouse;
+    
+    
+    private bool canAttack = true;
     private int _currentPoint;
     private NavMeshAgent _navMesh;
     private bool hunt;
-    private float distanceHunt;
+ 
     private float pouseHunt;
+    private float pouse;
 
     void Awake()
     {
@@ -20,7 +27,7 @@ public class GolemMove : MonoBehaviour
         _currentPoint = 0;
         hunt = false;
         pouseHunt = 0;
-        distanceHunt = 25;
+
     }
 
     
@@ -51,12 +58,12 @@ public class GolemMove : MonoBehaviour
 
 
 
-            // просто патрулирование
-            if (!hunt)
+        // просто патрулирование
+        if (!hunt)
         {
             if (_points.Length != 0)
             {
-                if (Vector3.Distance(transform.position, _points[_currentPoint].position) < _distance)
+                if (Vector3.Distance(transform.position, _points[_currentPoint].position) < 1.0f)
                 {
                     if (_currentPoint == _points.Length - 1)
                     {
@@ -72,6 +79,22 @@ public class GolemMove : MonoBehaviour
                 _navMesh.destination = _points[_currentPoint].position;
             }
         }
+
+        if (canAttack == false) pouse += Time.deltaTime;
+        if (pouse > attackPouse) canAttack = true;
+
+        // атака
+        if (canAttack && target != null && attackPower != 0 && Vector3.Distance(transform.position, target.transform.position) < attackdistance)
+        {
+            
+            
+            
+            GetComponent<Animator>().SetTrigger("Attak");
+            target.GetComponent<Health>()._health -= attackPower;
+            canAttack = false;
+            pouse = 0;
+        }
+        
         
         
     }

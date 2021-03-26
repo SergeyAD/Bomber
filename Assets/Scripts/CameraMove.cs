@@ -4,22 +4,48 @@ using UnityEngine;
 
 public class CameraMove : MonoBehaviour
 {
-    public GameObject _object;
-    private Vector3 _position;
-    public float _speed;
+    public GameObject cameraPoint;
+    public GameObject objectPoint;
+    public GameObject cameraFirePoint;
+    public GameObject objectFirePoint;
+    public float speed;
+    public bool _mainCamera;
 
-    private void Start()
+    private void Awake()
     {
-        _position = _object.transform.InverseTransformPoint(transform.position);
+        _mainCamera = true;
+    }
+
+    private void Update()
+    {
+        // переключение между камерами
+        if (Input.GetMouseButtonDown(1))
+        {
+            _mainCamera = false;
+        }
+        if (Input.GetMouseButtonUp(1))
+        {
+            _mainCamera = true;
+        }
     }
 
     private void LateUpdate()
     {
-        if (_object != null)
+        if (objectPoint != null)
         {
-            var currentPosition = _object.transform.TransformPoint(_position);
-            transform.position = Vector3.MoveTowards(transform.position, currentPosition, _speed * Time.deltaTime);
-            transform.LookAt(_object.transform);
+            if (_mainCamera)
+            {
+                transform.position = Vector3.MoveTowards(transform.position, cameraPoint.transform.position, speed * Time.deltaTime);
+                transform.LookAt(objectPoint.transform);
+            }
+                
+            else
+            {
+                transform.position = Vector3.MoveTowards(transform.position, cameraFirePoint.transform.position, speed * 10* Time.deltaTime);
+                transform.LookAt(objectFirePoint.transform);
+            }
+                
+            
         }
     }
 

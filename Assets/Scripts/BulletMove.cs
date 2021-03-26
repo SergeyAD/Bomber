@@ -56,20 +56,20 @@ public class BulletMove : MonoBehaviour
             if (other.GetComponent<Health>())
             {
                 other.GetComponent<Health>()._health -= _health;
-                if (other.GetComponent<Health>()._health <= 0)
-                {
-                    if (other.gameObject.GetComponent<Animator>())
-                    {
-                        if (other.gameObject.GetComponent<Animator>())
-                        other.gameObject.GetComponent<Animator>().SetBool("Die", true);
-                        Destroy(other.gameObject, 2);
-                     }
-                    else Destroy(other.gameObject, 1);
-                    if (other.GetComponent<Health>()._gamePoints > 0)
-                    {
-                        GameObject.FindGameObjectWithTag("Player").GetComponent<MainMove>().gamePoints += other.GetComponent<Health>()._gamePoints;
-                    }
-                }
+                //if (other.GetComponent<Health>()._health <= 0)
+                //{
+                //    if (other.gameObject.GetComponent<Animator>())
+                //    {
+                //        if (other.gameObject.GetComponent<Animator>())
+                //        other.gameObject.GetComponent<Animator>().SetBool("Die", true);
+                //        Destroy(other.gameObject, 2);
+                //     }
+                //    else Destroy(other.gameObject, 1);
+                //    if (other.GetComponent<Health>()._gamePoints > 0)
+                //    {
+                //        GameObject.FindGameObjectWithTag("Player").GetComponent<MainMove>().gamePoints += other.GetComponent<Health>()._gamePoints;
+                //    }
+                //}
             }
             Destroy(gameObject);
             Destroy(_boomer, 1);

@@ -9,6 +9,9 @@ public class MainMove : MonoBehaviour
     public float speedTurn;
     public GameObject guns;
     public GameObject bullet;
+    public GameObject bullet2point;
+    public GameObject bullet2;
+    public float bullet2pouse;
     public float pouseFire;
     public float powerFire;
     public int ammor;
@@ -16,14 +19,8 @@ public class MainMove : MonoBehaviour
     public Image healthBar;
     public TrajectoryScript Trajectory;
     public GameObject gamePointsText;
-
-    public Camera _mainCamera;
-    public Camera _fireCamera;
-
+    public GameObject finish;
     public int gamePoints;
-
-    //public float _maxHeight;
-    //public float _minHeight;
 
     private Vector3 _vector;
     private float _turn;
@@ -34,8 +31,6 @@ public class MainMove : MonoBehaviour
     private void Start()
     {
         keys = new List<GameObject>();
-        _mainCamera.enabled = true;
-        _fireCamera.enabled = false;
     }
 
 
@@ -44,23 +39,21 @@ public class MainMove : MonoBehaviour
         
         _vector.z = Input.GetAxis("Vertical");
         _turn = Input.GetAxis("Horizontal");
+        if (Input.GetAxis("Vertical") != 0 || Input.GetAxis("Horizontal") != 0)
+             GetComponent<Animator>().SetBool("Forward", true);
+        else
+            GetComponent<Animator>().SetBool("Forward", false);
 
-        // переключение между камерами
-        if (Input.GetMouseButtonDown(1) || Input.GetKeyDown(KeyCode.CapsLock))
-        {
-            _mainCamera.enabled = false;
-            _fireCamera.enabled = true;
-        }
-        if (Input.GetMouseButtonUp(1) || Input.GetKeyUp(KeyCode.CapsLock))
-        {
-            _mainCamera.enabled = true;
-            _fireCamera.enabled = false;
-        }
-        
         //обновление здоровья игрока
         healthBar.fillAmount = GetComponent<Health>()._health / 10;
         //обновление счета на экране
         gamePointsText.gameObject.GetComponent<Text>().text = gamePoints.ToString();
+
+        // если здоровья 0 - завершение игры
+        if (GetComponent<Health>()._health <=0)
+        {
+            finish.gameObject.GetComponent<UserFinishScript>().endLevel(false);
+        }
 
     }
 
@@ -70,19 +63,21 @@ public class MainMove : MonoBehaviour
     {
         
         // Движение игрока
+        
         var _move = _vector * speedRun * Time.deltaTime;
-        transform.parent.gameObject.transform.Translate(_move);
         var turn = _turn * speedTurn * Time.deltaTime;
+        
+        transform.parent.gameObject.transform.Translate(_move);
         transform.parent.gameObject.transform.Rotate(new Vector3(0, turn, 0));
 
         // Изменение угла выстрела
-        if (Input.GetKey(KeyCode.L)) //&& _guns.transform.GetChild(0).gameObject.transform.rotation.x < _maxHeight
+        if (Input.GetKey(KeyCode.O)) //&& _guns.transform.GetChild(0).gameObject.transform.rotation.x < _maxHeight
         {
-            gunRotate(guns.transform, -10);
+            gunRotateUp(guns.transform, -10);
         }
-        else if (Input.GetKey(KeyCode.O)) //&& _guns.transform.GetChild(0).gameObject.transform.rotation.x > _minHeight
+        else if (Input.GetKey(KeyCode.L)) //&& _guns.transform.GetChild(0).gameObject.transform.rotation.x > _minHeight
         {
-            gunRotate(guns.transform, 10);
+            gunRotateUp(guns.transform, 10);
         }
 
         // реализация паузы при стрельбе
@@ -93,30 +88,47 @@ public class MainMove : MonoBehaviour
 
 
         // отрисовка траектории выстрела
-        if (_canFire && _fireCamera.enabled )
-        {
-            Trajectory.ShowTrajectory(guns.transform.GetChild(1).gameObject.transform.position, guns.transform.GetChild(1).gameObject.transform.forward * powerFire);
-        }
-        else
-        {
-            Trajectory.HideTrajectory();
-        }
+        
+        //if (_canFire && _fireCamera.enabled )
+        //{
+        //    Trajectory.ShowTrajectory(guns.transform.GetChild(1).gameObject.transform.position, guns.transform.GetChild(1).gameObject.transform.forward * powerFire);
+        //}
+        //else
+        //{
+        //    Trajectory.HideTrajectory();
+        //}
 
 
         // выстрел
         if (Input.GetKey(KeyCode.Space))
         {
+            
             if (_canFire == true && ammor > 0)
             { 
             
-                GameObject bull = Instantiate(bullet, guns.transform.GetChild(1).gameObject.transform.position, transform.rotation);
+                GameObject bull = Instantiate(bullet, guns.transform.gameObject.transform.position, transform.rotation);
                 bull.GetComponent<BulletMove>()._sender = gameObject;
-                bull.GetComponent<Rigidbody>().AddForce(guns.transform.GetChild(1).gameObject.transform.forward*powerFire, ForceMode.Impulse);
+                bull.GetComponent<Rigidbody>().AddForce(guns.transform.gameObject.transform.forward*powerFire, ForceMode.Impulse);
                 ammor--;
                 _canFire = false;
                 _pouse = 0;
             }
         }
+
+        //стрельба из автомата - Не получается (((((
+        if (Input.GetMouseButton(0) && Camera.main.GetComponent<CameraMove>()._mainCamera == false)
+        {
+
+            Vector3 point = Input.mousePosition;
+            Ray ray = Camera.main.ScreenPointToRay(point);
+            Physics.Raycast(ray, out var hit);
+            Vector3 point2 = hit.point - bullet2point.transform.position;
+
+            point2.Normalize();
+            GameObject _bull2 = Instantiate(bullet2, bullet2point.transform.position, bullet2point.transform.rotation);
+            _bull2.GetComponent<Rigidbody>().AddForce(point2 * powerFire * 7, ForceMode.Impulse);
+        }
+
 
     }
 
@@ -131,9 +143,10 @@ public class MainMove : MonoBehaviour
     }
 
     // изменение угла наклона ствола
-    private void gunRotate(Transform _gunTransform, int _rotate)
+    private void gunRotateUp(Transform _gunTransform, int _rotate)
     {
-        _gunTransform.GetChild(1).gameObject.transform.Rotate(new Vector3(0, _rotate * speedRun * Time.deltaTime, 0));
+        // _gunTransform.GetChild(1).gameObject.transform.Rotate(new Vector3(0, _rotate * speedRun * Time.deltaTime, 0));
+        _gunTransform.gameObject.transform.Rotate(new Vector3(_rotate * speedRun * Time.deltaTime, 0 , 0));
     }
 
     // обработка использования user point
