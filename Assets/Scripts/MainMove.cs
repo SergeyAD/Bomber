@@ -31,6 +31,7 @@ public class MainMove : MonoBehaviour
     private void Start()
     {
         keys = new List<GameObject>();
+
     }
 
 
@@ -48,6 +49,8 @@ public class MainMove : MonoBehaviour
         healthBar.fillAmount = GetComponent<Health>()._health / 10;
         //обновление счета на экране
         gamePointsText.gameObject.GetComponent<Text>().text = gamePoints.ToString();
+
+
 
         // если здоровья 0 - завершение игры
         if (GetComponent<Health>()._health <=0)
@@ -103,7 +106,7 @@ public class MainMove : MonoBehaviour
         if (Input.GetKey(KeyCode.Space))
         {
             
-            if (_canFire == true && ammor > 0)
+            if (_canFire == true && ammor > 0 && Camera.main.GetComponent<CameraMove>()._mainCamera == true)
             { 
             
                 GameObject bull = Instantiate(bullet, guns.transform.gameObject.transform.position, transform.rotation);
@@ -113,21 +116,22 @@ public class MainMove : MonoBehaviour
                 _canFire = false;
                 _pouse = 0;
             }
+            //стрельба из автомата - Не получается (((((
+            if (Camera.main.GetComponent<CameraMove>()._mainCamera == false)
+            {
+
+                Vector3 point = Input.mousePosition;
+                Ray ray = Camera.main.ScreenPointToRay(point);
+                Physics.Raycast(ray, out var hit);
+                Vector3 point2 = hit.point - bullet2point.transform.position;
+
+                point2.Normalize();
+                GameObject _bull2 = Instantiate(bullet2, bullet2point.transform.position, bullet2point.transform.rotation);
+                _bull2.GetComponent<Rigidbody>().AddForce(point2 * powerFire * 7, ForceMode.Impulse);
+            }
         }
 
-        //стрельба из автомата - Не получается (((((
-        if (Input.GetMouseButton(0) && Camera.main.GetComponent<CameraMove>()._mainCamera == false)
-        {
-
-            Vector3 point = Input.mousePosition;
-            Ray ray = Camera.main.ScreenPointToRay(point);
-            Physics.Raycast(ray, out var hit);
-            Vector3 point2 = hit.point - bullet2point.transform.position;
-
-            point2.Normalize();
-            GameObject _bull2 = Instantiate(bullet2, bullet2point.transform.position, bullet2point.transform.rotation);
-            _bull2.GetComponent<Rigidbody>().AddForce(point2 * powerFire * 7, ForceMode.Impulse);
-        }
+        
 
 
     }
@@ -167,8 +171,9 @@ public class MainMove : MonoBehaviour
             foreach (GameObject _obj in keys1)
             {
                 keys.Add(_obj);
-
+                _obj.GetComponent<KeyScript>().imageKayOnCanvase.color = new Color(250, 247, 247, 200);
                 _object.transform.GetComponent<UserPoint>()._keys.Remove(_obj);
+
             }
 
 

@@ -15,6 +15,7 @@ public class PouseScript : MonoBehaviour
     [SerializeField]
     private Button _buttonExit;
 
+
     private void Awake()
     {
         canvasPouse.enabled = false;
@@ -27,6 +28,7 @@ public class PouseScript : MonoBehaviour
         _buttonRestart.onClick.AddListener(gameRestart);
         _buttonContinue.onClick.AddListener(() => gamePouse(false));
         _buttonExit.onClick.AddListener(gameExit);
+        
     }
 
     private void Update()
