@@ -7,14 +7,23 @@ public class EchoScript : MonoBehaviour
 {
     [SerializeField]
     public Collider player;
-    public AudioMixerGroup audioMixer;
+    [SerializeField]
+    public AudioReverbZone _audioReverbZone;
 
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other == player) // не могу понять как включить или отключить эффект эха...
+        if (other == player) 
         {
-           // audioMixer.audioMixer.
+            _audioReverbZone.enabled = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other == player)
+        {
+            _audioReverbZone.enabled = false;
         }
     }
 
