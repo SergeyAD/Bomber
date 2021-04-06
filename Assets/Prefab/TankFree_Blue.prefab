@@ -170,6 +170,7 @@ GameObject:
   - component: {fileID: 672221882971161554}
   - component: {fileID: 6907145695517216547}
   - component: {fileID: 8808128122493214712}
+  - component: {fileID: 621049087809929021}
   m_Layer: 0
   m_Name: TankFree_Blue
   m_TagString: Untagged
@@ -243,6 +244,22 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!114 &621049087809929021
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1153093373755847779}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff6a44aa00750a44c80d288324181449, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shot: {fileID: 5438087226983098962, guid: 6f533cd63caf85242a274f74a1de0951, type: 3}
+  shot2: {fileID: 1846142666359268448, guid: 53438ff3e586e9c4493f2fb7051ce96b, type: 3}
+  explosion: {fileID: 8915775408649693986, guid: 53f77f1978624284f8b456c018e145d0,
+    type: 3}
 --- !u!1 &1397629665669033979
 GameObject:
   m_ObjectHideFlags: 0

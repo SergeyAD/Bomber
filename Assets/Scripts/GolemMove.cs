@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+
+[RequireComponent(typeof(NavMeshAgent))]
 public class GolemMove : MonoBehaviour
 {
     public Transform[] _points;
@@ -14,19 +16,20 @@ public class GolemMove : MonoBehaviour
     
     
     private bool canAttack = true;
-    private int _currentPoint;
+    private int _currentPoint = 0;
     private NavMeshAgent _navMesh;
-    private bool hunt;
+    private bool hunt = false;
+    private Animator _animator;
+    private Health _health;
  
-    private float pouseHunt;
+    private float pouseHunt = 0;
     private float pouse;
 
     void Awake()
     {
         _navMesh = GetComponent<NavMeshAgent>();
-        _currentPoint = 0;
-        hunt = false;
-        pouseHunt = 0;
+        _animator = GetComponent<Animator>();
+        _health = target.GetComponent<Health>();
 
     }
 
@@ -37,8 +40,8 @@ public class GolemMove : MonoBehaviour
         if (target != null && Vector3.Distance(transform.position, target.transform.position) < distanceHunt)
         {
             hunt = true;
-            if (GetComponent<Animator>())
-                GetComponent<Animator>().SetBool("Walk", true);
+            if (_animator != null)
+                _animator.SetBool("Walk", true);
             _navMesh.destination = target.position;
             Debug.Log("Hunt!");
         }
@@ -74,8 +77,8 @@ public class GolemMove : MonoBehaviour
                         _currentPoint++;
                     }
                 }
-                if (GetComponent<Animator>())
-                    GetComponent<Animator>().SetBool("Walk", true);
+                if (_animator != null)
+                    _animator.SetBool("Walk", true);
                 _navMesh.destination = _points[_currentPoint].position;
             }
         }
@@ -86,11 +89,11 @@ public class GolemMove : MonoBehaviour
         // атака
         if (canAttack && target != null && attackPower != 0 && Vector3.Distance(transform.position, target.transform.position) < attackdistance)
         {
-            
-            
-            
-            GetComponent<Animator>().SetTrigger("Attak");
-            target.GetComponent<Health>()._health -= attackPower;
+
+
+
+            _animator.SetTrigger("Attak");
+            _health.health -= attackPower;
             canAttack = false;
             pouse = 0;
         }

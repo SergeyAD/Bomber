@@ -4,32 +4,36 @@ using UnityEngine;
 
 public class Health : MonoBehaviour
 {
-    public float _health;
-    public int _lives;
-    public int _gamePoints;
-    private bool alive;
-    private float pouse;
+    public float health;
+    public int lives;
+    public int gamePoints;
+    public GameObject dieObject;
+    
+    private bool _alive = true;
+    private float _pouse;
 
-    private void Awake()
-    {
-        alive = true;
-    }
-
-
+    
     private void Update()
     {
-        if (_health <= 0 && alive)
+        if (health <= 0 && _alive)
         {
             if (GetComponent<Animator>())
             {
                 GetComponent<Animator>().SetBool("Die", true);
-                pouse = 2;
+                _pouse = 2;
             }
-            pouse = 1;
+            _pouse = 1;
 
-            alive = false;
-            GameObject.FindGameObjectWithTag("Player").GetComponent<MainMove>().gamePoints += _gamePoints;
-            Destroy(gameObject, pouse);
+            _alive = false;
+            GameObject.FindGameObjectWithTag("Player").GetComponent<MainMove>().gamePoints += gamePoints;
+            if (dieObject != null)
+            {
+                var _dieObject = Instantiate(dieObject, gameObject.transform.position, gameObject.transform.rotation);
+            }
+            Destroy(gameObject, _pouse);
+
+
+          
         }
     }
 

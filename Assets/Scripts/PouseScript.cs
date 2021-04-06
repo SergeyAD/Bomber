@@ -1,34 +1,48 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PouseScript : MonoBehaviour
 {
+    [SerializeField]
     public Canvas canvasPouse;
+    [SerializeField]
     public bool pouse;
+
     [SerializeField]
     private Button _buttonRestart;
     [SerializeField]
     private Button _buttonContinue;
     [SerializeField]
     private Button _buttonExit;
+    [SerializeField]
+    private Slider _sliderlValue;
+    [SerializeField]
+    private AudioMixer _audioMixer;
 
 
     private void Awake()
     {
         canvasPouse.enabled = false;
         pouse = false;
-
+        GamePouse(pouse);
     }
 
     private void Start()
     {
-        _buttonRestart.onClick.AddListener(gameRestart);
-        _buttonContinue.onClick.AddListener(() => gamePouse(false));
-        _buttonExit.onClick.AddListener(gameExit);
+        _audioMixer.GetFloat("MasterValue", out float _value);
+        _sliderlValue.value = _value;
         
+        _buttonRestart.onClick.AddListener(GameRestart);
+        _buttonContinue.onClick.AddListener(() => GamePouse(false));
+        _buttonExit.onClick.AddListener(gameExit);
+        _sliderlValue.onValueChanged.AddListener(a => ChangeValue(a));
+
+
+
     }
 
     private void Update()
@@ -37,12 +51,17 @@ public class PouseScript : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.P))
         {
             
-            gamePouse(!pouse);
+            GamePouse(!pouse);
             
         }
     }
 
-    private void gamePouse(bool _pouse)
+    private void ChangeValue(float _value)
+    {
+        _audioMixer.SetFloat("MasterValue", _value);
+    }
+
+    private void GamePouse(bool _pouse)
     {
         if (_pouse)
         {
@@ -56,7 +75,7 @@ public class PouseScript : MonoBehaviour
         pouse = !pouse;
     }
 
-    private void gameRestart()
+    private void GameRestart()
     {
         // перезагружет сцену но игра не перезапускается.
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);

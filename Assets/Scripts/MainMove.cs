@@ -9,9 +9,12 @@ public class MainMove : MonoBehaviour
     public float speedTurn;
     public GameObject guns;
     public GameObject bullet;
+    public AudioSource bulletsound;
     public GameObject bullet2point;
     public GameObject bullet2;
+    public float bullet2power;
     public float bullet2pouse;
+    public AudioSource bullet2sound;
     public float pouseFire;
     public float powerFire;
     public int ammor;
@@ -25,8 +28,15 @@ public class MainMove : MonoBehaviour
     private Vector3 _vector;
     private float _turn;
     private float _pouse;
-    private bool _canFire = true;
+    private float _pouse2;
+    private bool _canFireBull = true;
+    private bool _canFireBull2 = true;
+    private AudioSource _moveSound;
 
+    private void Awake()
+    {
+        _moveSound = GetComponent<AudioScript>().moveSound;
+    }
 
     private void Start()
     {
@@ -41,19 +51,27 @@ public class MainMove : MonoBehaviour
         _vector.z = Input.GetAxis("Vertical");
         _turn = Input.GetAxis("Horizontal");
         if (Input.GetAxis("Vertical") != 0 || Input.GetAxis("Horizontal") != 0)
-             GetComponent<Animator>().SetBool("Forward", true);
+        {
+            GetComponent<Animator>().SetBool("Forward", true);
+            if (!_moveSound.isPlaying)
+                _moveSound.Play();
+        }
         else
+        {
             GetComponent<Animator>().SetBool("Forward", false);
+            if (_moveSound.isPlaying)
+                _moveSound.Stop();
+        }
 
         //обновление здоровья игрока
-        healthBar.fillAmount = GetComponent<Health>()._health / 10;
+        healthBar.fillAmount = GetComponent<Health>().health / 10;
         //обновление счета на экране
         gamePointsText.gameObject.GetComponent<Text>().text = gamePoints.ToString();
 
 
 
         // если здоровья 0 - завершение игры
-        if (GetComponent<Health>()._health <=0)
+        if (GetComponent<Health>().health <=0)
         {
             finish.gameObject.GetComponent<UserFinishScript>().endLevel(false);
         }
@@ -84,14 +102,19 @@ public class MainMove : MonoBehaviour
         }
 
         // реализация паузы при стрельбе
-        if (_canFire == false)
+        if (_canFireBull == false)
             _pouse += Time.deltaTime;
         if (_pouse > pouseFire)
-            _canFire = true; 
+            _canFireBull = true;
+
+        if (_canFireBull2 == false)
+            _pouse2 += Time.deltaTime;
+        if (_pouse2 > bullet2pouse)
+            _canFireBull2 = true;
 
 
         // отрисовка траектории выстрела
-        
+
         //if (_canFire && _fireCamera.enabled )
         //{
         //    Trajectory.ShowTrajectory(guns.transform.GetChild(1).gameObject.transform.position, guns.transform.GetChild(1).gameObject.transform.forward * powerFire);
@@ -106,28 +129,32 @@ public class MainMove : MonoBehaviour
         if (Input.GetKey(KeyCode.Space))
         {
             
-            if (_canFire == true && ammor > 0 && Camera.main.GetComponent<CameraMove>()._mainCamera == true)
+            if (_canFireBull == true && ammor > 0 && Camera.main.GetComponent<CameraMove>().mainCamera == true)
             { 
             
                 GameObject bull = Instantiate(bullet, guns.transform.gameObject.transform.position, transform.rotation);
                 bull.GetComponent<BulletMove>()._sender = gameObject;
                 bull.GetComponent<Rigidbody>().AddForce(guns.transform.gameObject.transform.forward*powerFire, ForceMode.Impulse);
+                PlaySounds(1);
                 ammor--;
-                _canFire = false;
+                _canFireBull = false;
                 _pouse = 0;
             }
-            //стрельба из автомата - Не получается (((((
-            if (Camera.main.GetComponent<CameraMove>()._mainCamera == false)
+            //стрельба из автомата 
+            if (_canFireBull2 == true && Camera.main.GetComponent<CameraMove>().mainCamera == false)
             {
 
                 Vector3 point = Input.mousePosition;
-                Ray ray = Camera.main.ScreenPointToRay(point);
-                Physics.Raycast(ray, out var hit);
-                Vector3 point2 = hit.point - bullet2point.transform.position;
+                var newPoint = Camera.main.ScreenToWorldPoint(position: new Vector3(point.x, point.y, z:280));
 
-                point2.Normalize();
                 GameObject _bull2 = Instantiate(bullet2, bullet2point.transform.position, bullet2point.transform.rotation);
-                _bull2.GetComponent<Rigidbody>().AddForce(point2 * powerFire * 7, ForceMode.Impulse);
+              
+                _bull2.GetComponent<BulletMove>()._sender = gameObject;
+                _bull2.transform.LookAt(newPoint);
+                _bull2.GetComponent<Rigidbody>().AddForce(newPoint * bullet2power, ForceMode.Impulse);
+                _canFireBull2 = false;
+                _pouse2 = 0;
+                PlaySounds(2);
             }
         }
 
@@ -146,6 +173,26 @@ public class MainMove : MonoBehaviour
     
     }
 
+    private void PlaySounds(int _shot)
+    {
+        if (GetComponent<AudioScript>())
+        {
+            
+
+            if (_shot == 1)
+            {
+               
+                GetComponent<AudioScript>().shot.Play();
+            }
+            if (_shot == 2)
+            {
+                GetComponent<AudioScript>().shot2.Play();
+            }
+        }
+        
+    }
+
+
     // изменение угла наклона ствола
     private void gunRotateUp(Transform _gunTransform, int _rotate)
     {
@@ -162,7 +209,7 @@ public class MainMove : MonoBehaviour
         ammor += _userPoint._ammor;
         _object.transform.GetComponent<UserPoint>()._ammor = 0;
         // забрать жизни
-        transform.GetComponent<Health>()._lives += _userPoint._live;
+        transform.GetComponent<Health>().lives += _userPoint._live;
         _object.transform.GetComponent<UserPoint>()._live = 0;
         // забрать ключи
         if (_userPoint._keys.Count != 0)

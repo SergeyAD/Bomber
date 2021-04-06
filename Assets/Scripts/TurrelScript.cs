@@ -17,7 +17,7 @@ public class TurrelScript : MonoBehaviour
     private bool _canFire = true;
 
 
-    void Update()
+    private void Update()
     {
         if (Vector3.Distance(transform.position, target.transform.position) < distance)
         {
@@ -57,6 +57,12 @@ public class TurrelScript : MonoBehaviour
 
         }
 
+        
+
+
+    }
+    public void DieObject()
+    {
 
     }
 }

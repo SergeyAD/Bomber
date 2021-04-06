@@ -8,14 +8,19 @@ public class BulletMove : MonoBehaviour
     public float _timerBul;
     public GameObject _boom;
     public GameObject _sender;
+    private AudioSource _boomSound;
 
 
-    private Vector3 _vector;
     private Vector3 _positionPrev;
-    private Vector3 _positionNext;
+
     private float _timer;
-    private Animator m_Animator;
-   
+
+
+
+    private void Awake()
+    {
+        _boomSound = GetComponent<AudioSource>();
+    }
 
     private void Start()
     {
@@ -55,7 +60,7 @@ public class BulletMove : MonoBehaviour
             var _boomer = Instantiate(_boom, gameObject.transform.position, gameObject.transform.rotation);
             if (other.GetComponent<Health>())
             {
-                other.GetComponent<Health>()._health -= _health;
+                other.GetComponent<Health>().health -= _health;
                 //if (other.GetComponent<Health>()._health <= 0)
                 //{
                 //    if (other.gameObject.GetComponent<Animator>())
@@ -71,8 +76,13 @@ public class BulletMove : MonoBehaviour
                 //    }
                 //}
             }
+
+
+
+
+            _boomSound.Play();
             Destroy(gameObject);
-            Destroy(_boomer, 1);
+            Destroy(_boomer, 3);
         }
     }
 

@@ -4,42 +4,42 @@ using UnityEngine;
 
 public class TrajectoryScript : MonoBehaviour
 {
-    private LineRenderer _lineRendererComponent;
+    //private LineRenderer _lineRendererComponent;
 
-    // Start is called before the first frame update
-    private void Start()
-    {
-        _lineRendererComponent = GetComponent<LineRenderer>();
-    }
 
-    public void ShowTrajectory( Vector3 _origin, Vector3 _speed)
-    {
-        _lineRendererComponent.enabled = true;
+    //private void Start()
+    //{
+    //    _lineRendererComponent = GetComponent<LineRenderer>();
+    //}
 
-        Vector3[] _points = new Vector3[100];
-        _lineRendererComponent.positionCount = _points.Length;
+    //public void ShowTrajectory( Vector3 _origin, Vector3 _speed)
+    //{
+    //    _lineRendererComponent.enabled = true;
 
-        for (var i = 0; i < _points.Length; i++)
-        {
-            float _time = i * 0.1f;
+    //    Vector3[] _points = new Vector3[100];
+    //    _lineRendererComponent.positionCount = _points.Length;
 
-            _points[i] = _origin + _speed* 10 * _time + Physics.gravity*_time*_time/2f; 
-            if (_points[i].y < -2 )
-            {
-                _lineRendererComponent.positionCount = i+1;
-                break;
-            }
-        }
+    //    for (var i = 0; i < _points.Length; i++)
+    //    {
+    //        float _time = i * 0.1f;
 
-        _lineRendererComponent.SetPositions(_points);
+    //        _points[i] = _origin + _speed* 10 * _time + Physics.gravity*_time*_time/2f; 
+    //        if (_points[i].y < -2 )
+    //        {
+    //            _lineRendererComponent.positionCount = i+1;
+    //            break;
+    //        }
+    //    }
+
+    //    _lineRendererComponent.SetPositions(_points);
        
 
-    }
+    //}
 
-    public void HideTrajectory()
-    {
-        _lineRendererComponent.enabled = false;
-    }
+    //public void HideTrajectory()
+    //{
+    //    _lineRendererComponent.enabled = false;
+    //}
 
 
 }

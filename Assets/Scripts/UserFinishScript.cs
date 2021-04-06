@@ -8,7 +8,7 @@ public class UserFinishScript : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other = player)
+        if (other == player)
         {
             endLevel(true);
         }

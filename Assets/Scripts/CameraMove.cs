@@ -9,11 +9,11 @@ public class CameraMove : MonoBehaviour
     public GameObject cameraFirePoint;
     public GameObject objectFirePoint;
     public float speed;
-    public bool _mainCamera;
+    public bool mainCamera;
 
     private void Awake()
     {
-        _mainCamera = true;
+        mainCamera = true;
     }
 
     private void Update()
@@ -21,11 +21,11 @@ public class CameraMove : MonoBehaviour
         // переключение между камерами
         if (Input.GetMouseButtonDown(1))
         {
-            _mainCamera = false;
+            mainCamera = false;
         }
         if (Input.GetMouseButtonUp(1))
         {
-            _mainCamera = true;
+            mainCamera = true;
         }
     }
 
@@ -33,7 +33,7 @@ public class CameraMove : MonoBehaviour
     {
         if (objectPoint != null)
         {
-            if (_mainCamera)
+            if (mainCamera)
             {
                 transform.position = Vector3.MoveTowards(transform.position, cameraPoint.transform.position, speed * Time.deltaTime);
                 transform.LookAt(objectPoint.transform);
