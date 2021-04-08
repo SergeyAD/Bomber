@@ -176,7 +176,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 1
   lives: 1
-  gamePoints: 0
+  gamePoints: 1
   dieObject: {fileID: 0}
 --- !u!1 &1088256926929212
 GameObject:

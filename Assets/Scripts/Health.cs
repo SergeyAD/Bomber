@@ -25,14 +25,15 @@ public class Health : MonoBehaviour
             _pouse = 1;
 
             _alive = false;
-            GameObject.FindGameObjectWithTag("Player").GetComponent<MainMove>().gamePoints += gamePoints;
+            //GameObject.FindGameObjectWithTag("Player").GetComponent<MainMove>().gamePoints += gamePoints;
+            PlayerManager.ChangeGamePoint(gamePoints);
             if (dieObject != null)
             {
                 var _dieObject = Instantiate(dieObject, gameObject.transform.position, gameObject.transform.rotation);
             }
             Destroy(gameObject, _pouse);
 
-
+            
           
         }
     }

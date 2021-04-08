@@ -38,7 +38,7 @@ public class PouseScript : MonoBehaviour
         
         _buttonRestart.onClick.AddListener(GameRestart);
         _buttonContinue.onClick.AddListener(() => GamePouse(false));
-        _buttonExit.onClick.AddListener(gameExit);
+        _buttonExit.onClick.AddListener(GameExit);
         _sliderlValue.onValueChanged.AddListener(a => ChangeValue(a));
 
 
@@ -80,7 +80,7 @@ public class PouseScript : MonoBehaviour
         // перезагружет сцену но игра не перезапускается.
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
-    private void gameExit()
+    private void GameExit()
     {
         Application.Quit();
     }

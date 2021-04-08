@@ -66,8 +66,8 @@ public class MainMove : MonoBehaviour
         //обновление здоровья игрока
         healthBar.fillAmount = GetComponent<Health>().health / 10;
         //обновление счета на экране
-        gamePointsText.gameObject.GetComponent<Text>().text = gamePoints.ToString();
-
+        //gamePointsText.gameObject.GetComponent<Text>().text = gamePoints.ToString();
+        gamePointsText.gameObject.GetComponent<Text>().text = PlayerManager.GamePoint().ToString();
 
 
         // если здоровья 0 - завершение игры
@@ -94,11 +94,11 @@ public class MainMove : MonoBehaviour
         // Изменение угла выстрела
         if (Input.GetKey(KeyCode.O)) //&& _guns.transform.GetChild(0).gameObject.transform.rotation.x < _maxHeight
         {
-            gunRotateUp(guns.transform, -10);
+            GunRotateUp(guns.transform, -10);
         }
         else if (Input.GetKey(KeyCode.L)) //&& _guns.transform.GetChild(0).gameObject.transform.rotation.x > _minHeight
         {
-            gunRotateUp(guns.transform, 10);
+            GunRotateUp(guns.transform, 10);
         }
 
         // реализация паузы при стрельбе
@@ -168,7 +168,7 @@ public class MainMove : MonoBehaviour
     {
         if (other.transform.GetComponent<UserPoint>())
         {
-            onUserPoint(other);
+            OnUserPoint(other);
         }
     
     }
@@ -194,32 +194,32 @@ public class MainMove : MonoBehaviour
 
 
     // изменение угла наклона ствола
-    private void gunRotateUp(Transform _gunTransform, int _rotate)
+    private void GunRotateUp(Transform _gunTransform, int _rotate)
     {
         // _gunTransform.GetChild(1).gameObject.transform.Rotate(new Vector3(0, _rotate * speedRun * Time.deltaTime, 0));
         _gunTransform.gameObject.transform.Rotate(new Vector3(_rotate * speedRun * Time.deltaTime, 0 , 0));
     }
 
     // обработка использования user point
-    private void onUserPoint(Collider _object)
+    private void OnUserPoint(Collider _object)
     {
         var _userPoint = _object.transform.GetComponent<UserPoint>();
 
         // забрать патроны
-        ammor += _userPoint._ammor;
-        _object.transform.GetComponent<UserPoint>()._ammor = 0;
+        ammor += _userPoint.Ammor;
+        _object.transform.GetComponent<UserPoint>().Ammor = 0;
         // забрать жизни
-        transform.GetComponent<Health>().lives += _userPoint._live;
-        _object.transform.GetComponent<UserPoint>()._live = 0;
+        transform.GetComponent<Health>().lives += _userPoint.Live;
+        _object.transform.GetComponent<UserPoint>().Live = 0;
         // забрать ключи
-        if (_userPoint._keys.Count != 0)
+        if (_userPoint.Keys.Count != 0)
         {
-            var keys1 = _userPoint._keys;
+            var keys1 = _userPoint.Keys;
             foreach (GameObject _obj in keys1)
             {
                 keys.Add(_obj);
                 _obj.GetComponent<KeyScript>().imageKayOnCanvase.color = new Color(250, 247, 247, 200);
-                _object.transform.GetComponent<UserPoint>()._keys.Remove(_obj);
+                _object.transform.GetComponent<UserPoint>().Keys.Remove(_obj);
 
             }
 
@@ -227,7 +227,7 @@ public class MainMove : MonoBehaviour
         }
 
         // генерация противноков
-        GameObject[] _ePoints = _userPoint._enemyPointsToActivate;
+        GameObject[] _ePoints = _userPoint.EnemyPointsToActivate;
 
         for (var i = 0; i < _ePoints.Length; i++)
         {
@@ -235,9 +235,9 @@ public class MainMove : MonoBehaviour
 
         }
         // открывание дверей
-        if (_userPoint._doorToOpen.Count != 0)
+        if (_userPoint.DoorToOpen.Count != 0)
         {
-            var doors = _userPoint._doorToOpen;
+            var doors = _userPoint.DoorToOpen;
             foreach (var door in doors)
             {
 
@@ -245,21 +245,21 @@ public class MainMove : MonoBehaviour
                 {
                     door.GetComponent<DoorScript>().open = true;
                     keys.Remove(door.GetComponent<DoorScript>().key);
-                    _object.transform.GetComponent<UserPoint>()._doorToOpen.Remove(door);
+                    _object.transform.GetComponent<UserPoint>().DoorToOpen.Remove(door);
                 }
             }
         }
         // если все предметы из userPoint забрали, userPoint убираем
-        if (userPointEmpty(_userPoint))
+        if (UserPointEmpty(_userPoint))
         {
             _object.gameObject.SetActive(false);
             Destroy(_object.gameObject);
         }
     }
 
-    private bool userPointEmpty(UserPoint _point)
+    private bool UserPointEmpty(UserPoint _point)
     {
-        return (_point._ammor == 0 && _point._live == 0 && _point._keys.Count == 0 && _point._doorToOpen.Count == 0);
+        return (_point.Ammor == 0 && _point.Live == 0 && _point.Keys.Count == 0 && _point.DoorToOpen.Count == 0);
     }
 
 }

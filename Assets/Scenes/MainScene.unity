@@ -408,6 +408,16 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8252652512619619323, guid: c196de564f802c6449fc8c210eb5d37b,
         type: 3}
+      propertyPath: Live
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8252652512619619323, guid: c196de564f802c6449fc8c210eb5d37b,
+        type: 3}
+      propertyPath: Ammor
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: -8252652512619619323, guid: c196de564f802c6449fc8c210eb5d37b,
+        type: 3}
       propertyPath: _live
       value: 1
       objectReference: {fileID: 0}
@@ -634,7 +644,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 300}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &160005115
@@ -2200,6 +2210,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8252652512619619323, guid: c196de564f802c6449fc8c210eb5d37b,
         type: 3}
+      propertyPath: Ammor
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -8252652512619619323, guid: c196de564f802c6449fc8c210eb5d37b,
+        type: 3}
       propertyPath: _live
       value: 1
       objectReference: {fileID: 0}
@@ -2210,9 +2225,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8252652512619619323, guid: c196de564f802c6449fc8c210eb5d37b,
         type: 3}
+      propertyPath: Keys.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8252652512619619323, guid: c196de564f802c6449fc8c210eb5d37b,
+        type: 3}
       propertyPath: _keys.Array.size
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -8252652512619619323, guid: c196de564f802c6449fc8c210eb5d37b,
+        type: 3}
+      propertyPath: Keys.Array.data[0]
+      value: 
+      objectReference: {fileID: 954697591}
     - target: {fileID: -8252652512619619323, guid: c196de564f802c6449fc8c210eb5d37b,
         type: 3}
       propertyPath: _keys.Array.data[0]
@@ -4095,6 +4120,18 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 729617238}
   m_Enabled: 1
+--- !u!114 &729617250
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 729617238}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0187afd0f8641cb46be8ecbb23901d87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &748181014
 GameObject:
   m_ObjectHideFlags: 0
@@ -5111,6 +5148,16 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8252652512619619323, guid: c196de564f802c6449fc8c210eb5d37b,
         type: 3}
+      propertyPath: Live
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8252652512619619323, guid: c196de564f802c6449fc8c210eb5d37b,
+        type: 3}
+      propertyPath: Ammor
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: -8252652512619619323, guid: c196de564f802c6449fc8c210eb5d37b,
+        type: 3}
       propertyPath: _live
       value: 1
       objectReference: {fileID: 0}
@@ -5131,9 +5178,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8252652512619619323, guid: c196de564f802c6449fc8c210eb5d37b,
         type: 3}
+      propertyPath: DoorToOpen.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8252652512619619323, guid: c196de564f802c6449fc8c210eb5d37b,
+        type: 3}
       propertyPath: _doorToOpen.Array.size
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -8252652512619619323, guid: c196de564f802c6449fc8c210eb5d37b,
+        type: 3}
+      propertyPath: DoorToOpen.Array.data[0]
+      value: 
+      objectReference: {fileID: 97338952}
     - target: {fileID: -8252652512619619323, guid: c196de564f802c6449fc8c210eb5d37b,
         type: 3}
       propertyPath: _doorToOpen.Array.data[0]
@@ -5584,6 +5641,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8252652512619619323, guid: c196de564f802c6449fc8c210eb5d37b,
         type: 3}
+      propertyPath: Ammor
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: -8252652512619619323, guid: c196de564f802c6449fc8c210eb5d37b,
+        type: 3}
       propertyPath: _ammor
       value: 20
       objectReference: {fileID: 0}
@@ -5604,9 +5666,24 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8252652512619619323, guid: c196de564f802c6449fc8c210eb5d37b,
         type: 3}
+      propertyPath: EnemyPointsToActivate.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -8252652512619619323, guid: c196de564f802c6449fc8c210eb5d37b,
+        type: 3}
       propertyPath: _enemyPointsToActivate.Array.size
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: -8252652512619619323, guid: c196de564f802c6449fc8c210eb5d37b,
+        type: 3}
+      propertyPath: EnemyPointsToActivate.Array.data[0]
+      value: 
+      objectReference: {fileID: 1371401049}
+    - target: {fileID: -8252652512619619323, guid: c196de564f802c6449fc8c210eb5d37b,
+        type: 3}
+      propertyPath: EnemyPointsToActivate.Array.data[1]
+      value: 
+      objectReference: {fileID: 1490555358}
     - target: {fileID: -8252652512619619323, guid: c196de564f802c6449fc8c210eb5d37b,
         type: 3}
       propertyPath: _enemyPointsToActivate.Array.data[0]
@@ -7974,7 +8051,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1336042147
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11402,6 +11479,16 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8252652512619619323, guid: c196de564f802c6449fc8c210eb5d37b,
         type: 3}
+      propertyPath: Live
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8252652512619619323, guid: c196de564f802c6449fc8c210eb5d37b,
+        type: 3}
+      propertyPath: Ammor
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: -8252652512619619323, guid: c196de564f802c6449fc8c210eb5d37b,
+        type: 3}
       propertyPath: _live
       value: 1
       objectReference: {fileID: 0}
@@ -11533,7 +11620,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 729617245}
-  _audioReverbZone: {fileID: 2019673695}
+  AudioReverbZone: {fileID: 2019673695}
 --- !u!167 &2019673695
 AudioReverbZone:
   m_ObjectHideFlags: 0

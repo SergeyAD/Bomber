@@ -8,14 +8,14 @@ public class EchoScript : MonoBehaviour
     [SerializeField]
     public Collider player;
     [SerializeField]
-    public AudioReverbZone _audioReverbZone;
+    public AudioReverbZone AudioReverbZone;
 
 
     private void OnTriggerEnter(Collider other)
     {
         if (other == player) 
         {
-            _audioReverbZone.enabled = true;
+            AudioReverbZone.enabled = true;
         }
     }
 
@@ -23,7 +23,7 @@ public class EchoScript : MonoBehaviour
     {
         if (other == player)
         {
-            _audioReverbZone.enabled = false;
+            AudioReverbZone.enabled = false;
         }
     }
 
